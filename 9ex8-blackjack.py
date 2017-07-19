@@ -23,13 +23,13 @@
 import random
 
 class Card:
-    units = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9,
-          'T':10, 'J':10, 'Q':10, 'K':10}
+    __units = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9,
+               'T':10, 'J':10, 'Q':10, 'K':10}
     
     def __init__(self, name):
-        if (name in Card.units):
+        if (name in Card.__units):
             self.name = name
-            self.value = Card.units[name]
+            self.value = Card.__units[name]
         else:
             raise ValueError(name + ' is not a valid card.')
 
@@ -42,25 +42,47 @@ class Card:
     def __gt__(self, other):
         return self.value > other.value
 
+    def is_ace(self):
+        return self.name == 'A'
+
 class Deck:
-    cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
+    def __init__(self):
+        self.cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9',
+                      'T', 'J', 'Q', 'K']
 
     def __str__(self):
-        return str(Deck.cards)
+        return str(self.cards)
     
     def random_card(self):
-        return Card(random.choice(Deck.cards))
-
+        return Card(random.choice(self.cards))
+    
 class Game:
-    deck = Deck()
-    print(deck)
+    def play(self):
+        deck = Deck()
+        dealer = 0
+
+        while dealer <= 17:
+            card = deck.random_card()
+            if card.is_ace():
+                if 17 <= dealer + 11 <= 21:
+                    card.value += 10
+            dealer += card.value
+        return True if dealer > 21 else False
+
+def print_summary(busts, games):
+    score = (.5 - busts / games) * 100
+    perf = 'better' if score > 0 else 'worse'
+    
+    print(f'Dealer busts in {busts} out of {games} games ({busts/games:.3f}%)')
+    print(f'The house should perform about {score:.2f}% {perf} than random.')
 
 def main():
-    k = Card('K')
-    f = Card('4')
-    d = Deck()
-    print(d.random_card())
-    n = Game()
-
+    blackjack = Game()
+    games = 10000
+    busts = 0
+    for i in range(games):
+        busts += blackjack.play()
+    print_summary(busts, games)
+    
 if __name__ == '__main__':
     main()
