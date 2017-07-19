@@ -20,3 +20,47 @@
 # 10 points added to the total exactly when doing so would produce a stopping
 # total(something between 17 and 21 inclusive).
 
+import random
+
+class Card:
+    units = {'A':1, '2':2, '3':3, '4':4, '5':5, '6':6, '7':7, '8':8, '9':9,
+          'T':10, 'J':10, 'Q':10, 'K':10}
+    
+    def __init__(self, name):
+        if (name in Card.units):
+            self.name = name
+            self.value = Card.units[name]
+        else:
+            raise ValueError(name + ' is not a valid card.')
+
+    def __str__(self):
+        return self.name + ': ' + str(self.value)
+
+    def __lt__(self, other):
+        return self.value < other.value
+
+    def __gt__(self, other):
+        return self.value > other.value
+
+class Deck:
+    cards = ['A', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K']
+
+    def __str__(self):
+        return str(Deck.cards)
+    
+    def random_card(self):
+        return Card(random.choice(Deck.cards))
+
+class Game:
+    deck = Deck()
+    print(deck)
+
+def main():
+    k = Card('K')
+    f = Card('4')
+    d = Deck()
+    print(d.random_card())
+    n = Game()
+
+if __name__ == '__main__':
+    main()
