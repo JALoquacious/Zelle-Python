@@ -12,7 +12,7 @@ class Card:
                'T':10, 'J':10, 'Q':10, 'K':10}
     
     def __init__(self, name):
-        if (name in Card.__units):
+        if name in Card.__units:
             self.name = name
             self.value = Card.__units[name]
         else:
@@ -42,32 +42,41 @@ class Deck:
         return Card(random.choice(self.cards))
     
 class Game:
-    def play(self):
-        deck = Deck()
-        dealer = 0
-
+    def __init__(self):
+        self.deck = Deck()
+    
+    def play(self, starting_value):
+        dealer = starting_value
         while dealer <= 17:
-            card = deck.random_card()
+            card = self.deck.random_card()
             if card.is_ace():
                 if 17 <= dealer + 11 <= 21:
                     card.value += 10
             dealer += card.value
         return True if dealer > 21 else False
 
+    def cycle(self):
+        for card in self.deck.cards:
+            games = 100
+            busts = 0
+            init_val = Card(card).value
+            print('Initial', init_val)
+            #self.play(init_val)
+            for i in range(games):
+                busts += self.play(init_val)
+            print_summary(busts, games)
+
 def print_summary(busts, games):
     score = (.5 - busts / games) * 100
     perf = 'better' if score > 0 else 'worse'
-    
+
     print(f'Dealer busts in {busts} out of {games} games ({busts/games:.3f}%)')
     print(f'The house should perform about {score:.2f}% {perf} than random.')
 
 def main():
     blackjack = Game()
-    games = 10000
-    busts = 0
-    for i in range(games):
-        busts += blackjack.play()
-    print_summary(busts, games)
+    blackjack.cycle()
+
     
 if __name__ == '__main__':
     main()
