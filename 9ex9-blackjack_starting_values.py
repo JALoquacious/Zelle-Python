@@ -55,27 +55,42 @@ class Game:
             dealer += card.value
         return True if dealer > 21 else False
 
-    def cycle(self):
-        for card in self.deck.cards:
-            games = 100
+    def cycle(self, games):
+        low = float('inf')
+        high = float('-inf')
+        low_card, high_card = 0, 0
+        for card in self.deck.cards[:10]:
             busts = 0
             init_val = Card(card).value
-            print('Initial', init_val)
-            #self.play(init_val)
             for i in range(games):
                 busts += self.play(init_val)
-            print_summary(busts, games)
+            score = busts / games
+            edge = (.5 - score) * 100
+            if edge < low:
+                low = edge
+                low_card = card
+            if edge > high:
+                high = edge
+                high_card = card
+            print_results(card, busts, games, score, edge)
+        return low, high, low_card, high_card
 
-def print_summary(busts, games):
-    score = (.5 - busts / games) * 100
-    perf = 'better' if score > 0 else 'worse'
+def print_results(card, busts, games, score, edge):
+    perf = 'better' if edge >= 0 else 'worse'
+    print(f'When initial card is {card}, ', end='')
+    print(f'dealer busts in {busts} out of {games} games ({score:.3f}%)')
+    print(f'The house should perform about {edge:.2f}% {perf} than random.\n')
 
-    print(f'Dealer busts in {busts} out of {games} games ({busts/games:.3f}%)')
-    print(f'The house should perform about {score:.2f}% {perf} than random.')
+def print_summary(low, high, low_card, high_card):
+    print(f'The dealer performs worst ({low:.2f}%) when initial draw is ' +
+          f'{low_card}.')
+    print(f'The dealer performs best ({high:.2f}%) when initial draw is ' +
+          f'{high_card}.')
 
 def main():
     blackjack = Game()
-    blackjack.cycle()
+    low, high, low_card, high_card = blackjack.cycle(10000)
+    print_summary(low, high, low_card, high_card)
 
     
 if __name__ == '__main__':
