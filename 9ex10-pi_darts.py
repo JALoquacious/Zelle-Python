@@ -22,7 +22,7 @@ class Point:
         self.y = y
 
     def __str__(self):
-        return f'(X: {self.x}, Y: {self.y})'
+        return f'X: {self.x:.2f}, Y: {self.y:.2f}'
 
     def __gt__(self, other):
         return self.x > other.x and self.y > other.y
@@ -30,14 +30,45 @@ class Point:
     def __lt__(self, other):
         return self.x < other.x and self.y < other.y
 
-    def inside_circle(self, radius):
-        return self.x **2 + self.y ** 2 < radius
+    def is_inside_circle(self, radius):
+        return self.x ** 2 + self.y ** 2 <= radius ** 2
+
+    def is_bulls_eye(self):
+        return self.x == 0 and self.y == 0
+
+class Cabinet:
+    def __init__(self, size):
+        self.dimension = size
+        self.radius = size / 2
+        self.circle_hits = 0
+        self.hits = 0
+
+    def __str__(self):
+        return (f'Hits inside circle: {self.circle_hits}, ' +
+                f'Hits outside circle: {self.hits - self.circle_hits}')
+
+    def throw(self, dart):
+        if dart.is_inside_circle(self.radius):
+            self.circle_hits += 1
+        self.hits += 1
+
+class Game:
+    def __init__(self, size):
+        self.cab = Cabinet(size)
+
+    def simulate(self, num_darts):
+        for i in range(num_darts):
+            dart = Point(self.cab.dimension * random() - self.cab.radius,
+                         self.cab.dimension * random() - self.cab.radius)
+            print('DART:', dart, '| In circle?',
+                  dart.is_inside_circle(self.cab.radius))
+            self.cab.throw(dart)
+        print(str(self.cab))
 
 def main():
-    simulate(100)
+    game = Game(size = 100)
+    game.simulate(100)
 
-def simulate(num_darts):
-    pass
 
 if __name__ == '__main__':
     main()
