@@ -14,10 +14,27 @@
 # centered at (0,0). The point lies inside the inscribed circle if
 # x**2 + y**2 <= 1.
 
-import random
+from random import random
+
+class Point:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
+    def __str__(self):
+        return f'(X: {self.x}, Y: {self.y})'
+
+    def __gt__(self, other):
+        return self.x > other.x and self.y > other.y
+
+    def __lt__(self, other):
+        return self.x < other.x and self.y < other.y
+
+    def inside_circle(self, radius):
+        return self.x **2 + self.y ** 2 < radius
 
 def main():
-    simulate(num_darts)
+    simulate(100)
 
 def simulate(num_darts):
     pass
