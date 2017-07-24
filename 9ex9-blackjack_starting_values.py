@@ -27,6 +27,9 @@ class Card:
     def __gt__(self, other):
         return self.value > other.value
 
+    def __eq__(self, other):
+        return self.value == other.value
+
     def is_ace(self):
         return self.name == 'A'
 

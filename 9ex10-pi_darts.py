@@ -36,6 +36,7 @@ class Point:
     def is_bulls_eye(self, radius, rings):
         return 0 <= self.x <= radius / rings and 0 <= self.y <= radius / rings
 
+
 class Cabinet:
     def __init__(self, size, rings):
         self.dimension    = size
@@ -57,6 +58,7 @@ class Cabinet:
                 self.bulls_eyes += 1
         self.hits += 1
 
+
 class Game:
     def __init__(self, size, rings, num_darts):
         self.cab = Cabinet(size, rings)
@@ -68,11 +70,12 @@ class Game:
                          self.cab.dimension * random() - self.cab.radius)
             self.cab.hit(dart)
         print(str(self.cab))
-        return 4 * (self.cab.target_hits / self.cab.hits)
+        return 4 * (self.cab.target_hits / self.cab.hits) # PI estimator
 
     def summarize(self, pi):
         print(f'\nBased on {self.darts:,} darts thrown at a dart board of ')
         print(f'radius {self.cab.radius}, PI can be approximated to {pi}.')
+
 
 def main():
     game = Game(size = 100, rings = 5, num_darts = 100000)

@@ -27,7 +27,7 @@ class Card:
                'T':10, 'J':10, 'Q':10, 'K':10}
     
     def __init__(self, name):
-        if (name in Card.__units):
+        if name in Card.__units:
             self.name = name
             self.value = Card.__units[name]
         else:
@@ -41,6 +41,9 @@ class Card:
 
     def __gt__(self, other):
         return self.value > other.value
+
+    def __eq__(self, other):
+        return self.value == other.value
 
     def is_ace(self):
         return self.name == 'A'
@@ -57,12 +60,13 @@ class Deck:
         return Card(random.choice(self.cards))
     
 class Game:
+    def __init__(self):
+        self.deck = Deck()
+        
     def play(self):
-        deck = Deck()
         dealer = 0
-
         while dealer <= 17:
-            card = deck.random_card()
+            card = self.deck.random_card()
             if card.is_ace():
                 if 17 <= dealer + 11 <= 21:
                     card.value += 10
