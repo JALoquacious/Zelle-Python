@@ -10,8 +10,25 @@
 # from the starting point will you end up? Write a program to help you
 # investigate this question.
 
+from random import choice
+
+def walk(steps):
+    values = []
+    for s in range(steps):
+        values.append(choice([-1, 1]))
+    return sum(values)
+
+def simulate(walks, steps):
+    total = 0
+    for i in range(walks):
+        distance = walk(steps)
+        total += distance
+        print(f'Sim # {i + 1:3d}:\t\t{distance:5d} steps')
+        print('-----------------------------------')
+    print('Average movement from starting position:', total / walks)
+
 def main():
-    pass
+    simulate(walks = 10, steps = 10000) # high lag with steps > 500,000
 
 if __name__ == '__main__':
     main()
