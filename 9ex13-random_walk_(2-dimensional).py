@@ -39,15 +39,27 @@ class RandomWalk:
         y_results = []
         for i in range(walks):
             coord = RandomWalk.walk(steps)
-            print(coord)
+            print(coord) # summarize individual walk
             x_results.append(coord.x)
             y_results.append(coord.y)
         mean_x = round(sum(x_results) / walks)
         mean_y = round(sum(y_results) / walks)
         return Position(mean_x, mean_y)
 
+
+def print_summary(walks, steps, position):
+    dir_ns = 'north' if position.y > 0 else 'south'
+    dir_ew = 'east' if position.x > 0 else 'west'
+    print(f'\nIn {walks} walks, comprising {steps:,} steps each,', end=' ')
+    print(f'the average ending position was {abs(position.x)}')
+    print(f'step(s) {dir_ew} and {abs(position.y)} step(s) {dir_ns}', end=' ')
+    print(f'from the origin. ({str(position)})')
+
 def main():
-    print(RandomWalk.simulate(walks = 10, steps = 10000))
+    walks = 10
+    steps = 10000
+    position = RandomWalk.simulate(walks, steps)
+    print_summary(walks, steps, position)
 
 if __name__ == '__main__':
     main()
