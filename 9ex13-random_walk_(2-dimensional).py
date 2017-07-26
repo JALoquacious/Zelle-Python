@@ -26,8 +26,28 @@ class Position:
         return f'X: {self.x}'.ljust(8) + f'Y: {self.y}'
 
 
+class RandomWalk:
+    def walk(steps):
+        position = Position(0, 0)
+        for s in range(steps):
+            position += (choice([Position(0, +1), Position(+1, 0),
+                                 Position(0, -1), Position(-1, 0)]))
+        return position
+
+    def simulate(walks, steps):
+        x_results = []
+        y_results = []
+        for i in range(walks):
+            coord = RandomWalk.walk(steps)
+            print(coord)
+            x_results.append(coord.x)
+            y_results.append(coord.y)
+        mean_x = round(sum(x_results) / walks)
+        mean_y = round(sum(y_results) / walks)
+        return Position(mean_x, mean_y)
+
 def main():
-    pass
+    print(RandomWalk.simulate(walks = 10, steps = 10000))
 
 if __name__ == '__main__':
     main()
